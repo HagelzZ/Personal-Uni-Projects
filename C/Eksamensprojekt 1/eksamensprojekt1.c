@@ -8,11 +8,21 @@ Author: Alexander "HagelzZ" Hagelberg
 void scan_data(char *operator, double *operand){
     printf("Indtast operator: ");
     scanf(" %c", operator);
+    /*
+    While-lykke der bruges til at rydde bufferen ved at tage eventuelle "afventende inputs"
+    og tjekke hvorvidt det ikke er lig med newline OG 'EOF' som indikerer End Of File
+    Dette var nødvendigt siden der var probelemer med en tidligere version af programmet
+    hvor den kun nogle gange brugte rigtige input og andre gange "ghost inputs" som jeg kalder dem:)
+    */
+    int c; /* Udefineret integer der bruges til en senere funktion */
+    while ((c = getchar()) != '\n' && c != EOF) { }
 
     /* Tjekker om operatoren er binær, unær eller ugyldig */
     if(*operator == '+' || *operator == '-' || *operator == '*' || *operator == '/' || *operator == '^') {
         printf("Indtast operand: ");
         scanf(" %lf", operand);
+
+        while ((c = getchar()) != '\n' && c != EOF) { }
     } else if(*operator == '#' || *operator == '%' || *operator == '!' || *operator == 'q') {
         *operand = 0;
     } else {
@@ -72,7 +82,6 @@ double run_calculator() {
     double akkumulator = 0.0;
     char operator;
     double operand;
-    int c; /* Udefineret integer der bruges til en senere funktion */
     
     /* Looper scan_data() og do_next_op() indtil brugeren indtaster 'q' for at afslutte */
     while(operator != 'q'){
@@ -83,14 +92,6 @@ double run_calculator() {
 
         /* Udfører udregninger baseret på indhold af 'operand' og 'operator' variablerne */
         do_next_op(operator, operand, &akkumulator);
-        
-        /*
-        While-lykke der bruges til at rydde bufferen ved at tage eventuelle "afventende inputs"
-        og tjekke hvorvidt det ikke er lig med newline OG 'EOF' som indikerer End Of File
-        Dette var nødvendigt siden der var probelemer med en tidligere version af programmet
-        hvor den kun nogle gange brugte rigtige input og andre gange "ghost inputs" som jeg kalder dem:)
-        */
-        while ((c = getchar()) != '\n' && c != EOF) { }
     }
     /* Returnerer til 'main()' funktionen med værdien gemt i 'akkumulator' variablen */
     return akkumulator;
